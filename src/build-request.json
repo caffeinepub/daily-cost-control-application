@@ -1,0 +1,76 @@
+{
+  "kind": "build_request",
+  "title": "Tournament admin score entry: select Player 1 + Player 2 and fix non-scrollable name dropdown",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update the Tournament \"Enter Scores\" form so that when a user with admin/score-auth-admin access is entering scores, the form allows selecting both participants explicitly as \"Player 1\" and \"Player 2\" (not implicitly using the caller as Player 1). Ensure Player 1 and Player 2 cannot be the same person, and keep all user-facing labels/help text in English.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "When admin is entering scores, we need to add both players names. So player 1 and player 2."
+        ]
+      },
+      "acceptanceCriteria": [
+        "In the Tournament -> Enter Scores tab, admins/score-auth-admins see two separate member selectors labeled \"Player 1\" and \"Player 2\".",
+        "The form prevents selecting the same member for both Player 1 and Player 2 and shows a clear English validation message.",
+        "Submitting as an admin records the match with the selected Player 1 and Player 2 principals in the backend tournament match record (not using the admin caller as playerA unless they were selected).",
+        "Non-admin authenticated users retain the existing UX of selecting only an opponent (caller remains Player 1)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add a backend entrypoint for admin/score-auth-admin tournament score entry that accepts both Player 1 and Player 2 principals along with the scores/round/table, enforces the same best-of-three validation, and applies the same tournament state checks as the existing tournament score submission flow.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "When admin is entering scores, we need to add both players names. So player 1 and player 2."
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new shared backend method exists for admin/score-auth-admins to submit tournament match scores for arbitrary Player 1 + Player 2 (caller must be admin or score-auth-admin).",
+        "The method rejects invalid scores and rejects non-active tournaments, consistent with the existing tournament score validation behavior.",
+        "The existing player-submission method continues to work unchanged for non-admin users."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Fix the player-name dropdown in the Tournament score-entry form so the list of names is scrollable and usable on long member lists (including on mobile). Ensure the Select dropdown content has a consistent max height and vertical scrolling behavior.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Also drop down of names is not scrolling"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When the member Select dropdown is opened in the score-entry form, it shows a vertical scrollbar (when needed) and the user can scroll to reach all members.",
+        "The dropdown remains scrollable on mobile/touch devices.",
+        "The fix applies to both Player 1/Player 2 selectors (admin view) and the opponent selector (non-admin view)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor with logic in backend/main.mo.",
+    "Do not edit frontend immutable paths listed in SYSTEM_CONTEXT (e.g., frontend/src/hooks/useInternetIdentity.ts(x), frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui).",
+    "All user-facing text must be in English."
+  ],
+  "nonGoals": [
+    "Do not implement tournament pairing/round creation logic beyond what is required to support admin entering scores.",
+    "Do not add new authentication providers or change Internet Identity behavior.",
+    "Do not redesign unrelated tournament tabs (overview/registration/leaderboard/approvals) beyond what is needed for the score-entry updates."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

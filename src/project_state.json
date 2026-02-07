@@ -1,0 +1,320 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 11,
+  "summary": "FTTLR (Fellowship of Table Tennis Loving Rotarians) is a full-stack Internet Computer (ICP) dapp for managing a table-tennis fellowship: member onboarding via one-time claim codes, Internet Identity authentication, Elo-based rankings and category leaderboards, match score submission with opponent/admin approval workflow, weekly schedule management, photo gallery uploads, homepage announcement banner rotation from selected photos, and a lightweight monthly tournament module (announce/start/pause/end/reset, registration, and standings). The frontend is a React + Tailwind UI that talks to a Motoko canister backend via generated actors and TanStack React Query.",
+  "existing_features": [
+    {
+      "id": "IF-1",
+      "title": "Internet Identity authentication with persistent sessions",
+      "synonyms": [
+        "II login",
+        "AuthClient login/logout"
+      ],
+      "description": "Users can log in/out via Internet Identity; identity is loaded from local storage on app mount, supports long-lived delegations, and exposes login status state via a context provider.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-2",
+      "title": "Dynamic canister actor creation (anonymous vs authenticated)",
+      "synonyms": [
+        "Actor hook",
+        "createActorWithConfig"
+      ],
+      "description": "Frontend builds an anonymous actor when not logged in and an authenticated actor when logged in; on authenticated actor creation it calls initializeAccessControl() and invalidates/refetches dependent React Query caches on identity changes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-3",
+      "title": "User profile management (caller profile)",
+      "synonyms": [
+        "Profile setup",
+        "Caller profile"
+      ],
+      "description": "Authenticated users can fetch and save their own UserProfile (currently name, optional photo supported in backend). New users are prompted with a blocking ProfileSetupModal to enter a name.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "Role-based access control (main admin + user + guest)",
+      "synonyms": [
+        "AccessControl",
+        "initializeAccessControl"
+      ],
+      "description": "Backend assigns the first authenticated principal as main admin and others as users; permissions are enforced in canister methods via AccessControl.hasPermission/isAdmin checks.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "Score-authentication admin role and management",
+      "synonyms": [
+        "Score auth admins",
+        "Match moderators"
+      ],
+      "description": "Main admin can appoint/remove score-authentication admins. Score-auth admins can perform privileged operations such as approving/rejecting matches and managing onboarding/schedule/photos per backend checks.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "Member onboarding via one-time claim codes",
+      "synonyms": [
+        "Claim codes",
+        "Pre-created accounts"
+      ],
+      "description": "Admins/score-auth admins can pre-create member records (name + optional photo) and receive a unique claim code. Users log in and claim the code to link their principal to the member profile; the code is deleted after use.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "Member directory with claimed/unclaimed status",
+      "synonyms": [
+        "Members list",
+        "PublicMemberDirectoryEntry"
+      ],
+      "description": "Public member directory combines claimed members (ranked by rating) and unclaimed pre-created members (rank 0), showing avatars, Elo ratings, and claim status badges.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "Global leaderboard with ranked member profiles",
+      "synonyms": [
+        "Elo leaderboard",
+        "getLeaderboard"
+      ],
+      "description": "Backend returns members sorted by Elo rating descending with rank numbers; frontend displays rank, avatar, rating, match count, and tier/category mapping.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-9",
+      "title": "Automatic 8-tier category leaderboards",
+      "synonyms": [
+        "Category tiers",
+        "Division into 8 groups"
+      ],
+      "description": "Backend divides all members equally into 8 named categories based on global Elo ordering (remainder distributed from the top). Frontend renders each category in tabs with per-category player tables.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-10",
+      "title": "Match score submission workflow",
+      "synonyms": [
+        "Submit match",
+        "Score reporting"
+      ],
+      "description": "Authenticated members can submit match scores against another member. UI provides grouped opponent selection (10 alphabetical ranges), score validation (no ties), and submission creates a pending match record.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-11",
+      "title": "Pending match approvals with opponent/admin controls",
+      "synonyms": [
+        "Approve/reject matches",
+        "Pending matches dashboard"
+      ],
+      "description": "Pending matches are viewable by authenticated users; opponents can approve or reject with a reason. Admins/score-auth admins can manage all pending matches from an elevated view.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-12",
+      "title": "Elo rating updates on match approval with variable K-factor",
+      "synonyms": [
+        "Elo calculation",
+        "Rating changes"
+      ],
+      "description": "When a match is approved, backend computes expected scores and adjusts each player’s rating using a K-factor based on games played (<30/30–99/100+). Rating changes are stored in match records and appended to each player’s matchHistory.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-13",
+      "title": "Approved match history (personal and global views)",
+      "synonyms": [
+        "Match history",
+        "All matches table"
+      ],
+      "description": "Users can view their approved matches (win/loss, scores, rating changes). A separate screen lists all approved matches with sorting/filtering by player and date, including rating changes and stored K-factor.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-14",
+      "title": "Per-player summary dashboard",
+      "synonyms": [
+        "Player dashboard",
+        "Player match history"
+      ],
+      "description": "Authenticated users can view a dashboard for themselves or another selected player, showing profile info, current Elo, K-factor rule explanation, and a scrollable list of approved matches with opponent names and rating deltas.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-15",
+      "title": "Weekly schedule with admin CRUD",
+      "synonyms": [
+        "Practice schedule",
+        "Session management"
+      ],
+      "description": "Backend stores weekly sessions keyed by timestamp; admins/score-auth admins can create, update, and delete sessions. Frontend shows sessions with date/time and notes, with a preview mode for home page.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-16",
+      "title": "Photo gallery with admin uploads and deletions",
+      "synonyms": [
+        "Gallery",
+        "Photo management"
+      ],
+      "description": "Admins/score-auth admins can upload photos (ExternalBlob) with uploaderName and delete photos. Frontend displays a gallery combining a static promo image with uploaded photos; delete uses confirmation dialogs and cache invalidation.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-17",
+      "title": "Homepage announcement banner with rotating selected photos",
+      "synonyms": [
+        "Banner carousel",
+        "AnnouncementBanner"
+      ],
+      "description": "Frontend displays a banner carousel sourced from selected banner photo keys and photo blobs; rotates automatically every 3 seconds with fade transitions and supports manual navigation dots.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-18",
+      "title": "Banner photo administration (upload/select/remove/delete/reorder; max 10)",
+      "synonyms": [
+        "AdminBannerManager",
+        "Banner Manager"
+      ],
+      "description": "Admins/score-auth admins can upload banner photos (which also upload to photos store), add/remove photos from the displayed banner list, delete banner photos from both banner and photo storage, reorder displayed photos, and enforce a max of 10 with live count queries.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-19",
+      "title": "Admin management console (onboarding, claim status, deletion, role admin)",
+      "synonyms": [
+        "Admin panel",
+        "Management tabs"
+      ],
+      "description": "An admin interface provides member creation with claim codes, viewing claimed vs unclaimed status, deleting members with confirmation, banner management integration, and (main admin only) appointment/removal of score-auth admins.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-20",
+      "title": "Tournament lifecycle and registration module",
+      "synonyms": [
+        "Monthly tournament",
+        "Swiss-system tournament UI"
+      ],
+      "description": "Backend supports tournament states (notStarted/announced/active/paused/completed), player registration/unregistration, admin controls to announce/start/pause/end/reset, a tournament leaderboard view based on stored playerStats, and an admin-only registered players list (with 3s polling) via getRegisteredPlayerDetails().",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-21",
+      "title": "HTTP outcalls helper module (GET/POST)",
+      "synonyms": [
+        "IC.http_request wrapper",
+        "Outcall module"
+      ],
+      "description": "Backend provides an outcall module that wraps IC http_request for GET/POST with fixed cycle budget, user-agent header, idempotency header for POST, and a transform function that strips response headers.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-22",
+      "title": "Caffeine blob-storage integration and gateway authorization utilities",
+      "synonyms": [
+        "Storage mixin",
+        "Blob GC helpers"
+      ],
+      "description": "Backend includes a storage mixin/state to manage authorized storage gateway principals, report dead blobs for deletion, confirm blob pruning with forced GC, and provide a certificate response for uploads; includes a cashier refill endpoint guarded by environment variable principal.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-tournament-enter-scores-form-so-that-when-a-user-with-admin-score-auth-admin-access-is-entering-scores-the-form-allows-selecting-both-participants-explicitly-as-player-1-and-player-2-not-implicitly-using-the-caller-as-player-1-ensure-player-1-and-player-2-cannot-be-the-same-person-and-keep-all-user-facing-labels-help-text-in-english",
+      "title": "Update the Tournament \"Enter Scores\" form so that when a user with admin/score-auth-admin access is entering scores, the form allows selecting both participants explicitly as \"Player 1\" and \"Player 2\" (not implicitly using the caller as Player 1). Ensure Player 1 and Player 2 cannot be the same person, and keep all user-facing labels/help text in English.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-player-name-dropdown-in-the-tournament-score-entry-form-so-the-list-of-names-is-scrollable-and-usable-on-long-member-lists-including-on-mobile-ensure-the-select-dropdown-content-has-a-consistent-max-height-and-vertical-scrolling-behavior",
+      "title": "Fix the player-name dropdown in the Tournament score-entry form so the list of names is scrollable and usable on long member lists (including on mobile). Ensure the Select dropdown content has a consistent max height and vertical scrolling behavior.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Tournament/admin score-entry screen must allow selecting both Player 1 and Player 2 (not just one player/opponent).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Fix player-name dropdown list in admin score-entry so it is scrollable and shows the full member list (especially on mobile/long lists).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Add a backend entrypoint for admin/score-auth-admin tournament score entry that accepts both Player 1 and Player 2 principals along with the scores/round/table, enforces the same best-of-three validation, and applies the same tournament state checks as the existing tournament score submission flow.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    }
+  ],
+  "architectural_notes": [
+    "Frontend uses React with TanStack React Query for all canister reads/writes; mutations invalidate/refetch relevant query keys to keep UI in sync.",
+    "Identity/auth is handled via Internet Identity using @dfinity/auth-client; authenticated sessions are stored and reloaded on mount with long TTL (30 days).",
+    "A dedicated actor hook (useActor) creates an anonymous or authenticated canister actor and calls initializeAccessControl() after login; actor recreation is keyed by principal and triggers global query invalidation/refetch.",
+    "Backend is a Motoko canister using mo:core Map/List/Array for state; state is organized into Maps for members, matches, schedules, photos, banner photos, claim codes, and score-auth admins.",
+    "Role model: first authenticated principal to initialize becomes main admin (AccessControl.initialize); additional privileged users are “score-authentication admins” stored separately and combined with admin checks (isAdminOrScoreAuthAdmin).",
+    "Elo ratings are recalculated on match approval with a variable K-factor based on games played (<30: 40, 30–99: 20, 100+: 10).",
+    "Leaderboard categories are computed server-side by sorting members by rating and dividing equally into 8 named tiers, with remainder distributed to top categories.",
+    "Photos are stored as ExternalBlob objects and managed through canister APIs; banner is a separate selection list capped at 10 photos with reorder/add/remove/delete operations.",
+    "Homepage announcement banner is a frontend carousel that auto-rotates banner-selected photos every 3 seconds with fade transitions.",
+    "Backend includes a Caffeine blob-storage mixin and helper canister methods for storage gateway authorization, blob GC coordination, and certificate creation; also includes an HTTP outcalls helper module for GET/POST with a transform to strip headers.",
+    "Backend includes a no-op migration module wired via (with migration = Migration.run), enabling future stable-state migrations without changing actor code structure.",
+    "Backend foundational components were upgraded/standardized: access-control (component:authorization:v3.0.0), blob-storage (component:blob-storage:v4.0.0), and http-outcalls (component:http-outcalls:v3.0.0).",
+    "Project now includes a reusable build-template scaffolding (component:build-template-react:v1.0.0) with scripts and configuration for packaging/deploying an ICP React dapp, plus a bundled shadcn-ui component set (component:shadcn-ui:v1.0.0)."
+  ],
+  "known_issues": [
+    "AdminManagement.getMemberName(principal) ignores the principal argument and returns the first claimed member, so score-auth admin display names can be incorrect.",
+    "AdminManagement “Appoint Admin” SelectItem values are set to strings like \"member-0\" rather than the member’s Principal text; Principal.fromText(selectedMember) will fail, breaking appointment flow.",
+    "Backend updateMemberPhoto() is restricted to admins/score-auth admins, but the UI copy implies any claimed member can update their own photo; intended permissions/UI messaging are inconsistent.",
+    "weeklySchedule is returned as Map.values().toArray() without sorting; session order in the UI may be non-deterministic across replicas/updates.",
+    "MatchScore.kFactor stores only kFactorA (player A) even though player B may have a different K-factor; the UI shows a single K-factor value for a match, which can be misleading.",
+    "endTournament sets endTimestamp to startTimestamp (likely a bug; should be Time.now()).",
+    "Tournament match submission/round progression appears incomplete: tournamentState.rounds is initialized empty and there is no implemented pairing/round creation logic, yet submitTournamentMatchScore expects existing rounds.",
+    "Frontend uses URL.createObjectURL for member photos in several components without explicit revocation; may cause memory growth during long sessions.",
+    "Several React Query hooks for banner photo counts/keys use staleTime:0 and gcTime:0 plus explicit refetching; can increase network/canister load if many clients are active.",
+    "Admin tournament score-entry UI is missing fields to select both Player 1 and Player 2; dropdown list for selecting names does not scroll, preventing access to full member list."
+  ],
+  "isFixRequest": true,
+  "generatedImages": [],
+  "gameProjectType": "none",
+  "projectName": "FTTLR",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

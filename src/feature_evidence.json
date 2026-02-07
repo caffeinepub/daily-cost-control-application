@@ -1,0 +1,50 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-the-tournament-enter-scores-form-so-that-when-a-user-with-admin-score-auth-admin-access-is-entering-scores-the-form-allows-selecting-both-participants-explicitly-as-player-1-and-player-2-not-implicitly-using-the-caller-as-player-1-ensure-player-1-and-player-2-cannot-be-the-same-person-and-keep-all-user-facing-labels-help-text-in-english",
+      "featureTitle": "Update the Tournament \"Enter Scores\" form so that when a user with admin/score-auth-admin access is entering scores, the form allows selecting both participants explicitly as \"Player 1\" and \"Player 2\" (not implicitly using the caller as Player 1). Ensure Player 1 and Player 2 cannot be the same person, and keep all user-facing labels/help text in English.",
+      "files": [
+        "frontend/src/components/Tournament.tsx",
+        "frontend/src/components/TournamentScoreEntry.tsx",
+        "frontend/src/hooks/useQueries.ts"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-fix-the-player-name-dropdown-in-the-tournament-score-entry-form-so-the-list-of-names-is-scrollable-and-usable-on-long-member-lists-including-on-mobile-ensure-the-select-dropdown-content-has-a-consistent-max-height-and-vertical-scrolling-behavior",
+      "featureTitle": "Fix the player-name dropdown in the Tournament score-entry form so the list of names is scrollable and usable on long member lists (including on mobile). Ensure the Select dropdown content has a consistent max height and vertical scrolling behavior.",
+      "files": [
+        "frontend/src/components/TournamentScoreEntry.tsx",
+        "frontend/src/index.css"
+      ],
+      "components": [
+        "authorization@3.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-04T11:13:05.104Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 3,
+    "implemented": 2,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Update the Tournament \"Enter Scores\" form so that when a user with admin/score-auth-admin access is entering scores, the form allows selecting both participants explicitly as \"Player 1\" and \"Player 2\" (not implicitly using the caller as Player 1). Ensure Player 1 and Player 2 cannot be the same person, and keep all user-facing labels/help text in English.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/TournamentScoreEntry.tsx",
+          "frontend/src/components/Tournament.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/TournamentScoreEntry.tsx",
+          "frontend/src/components/Tournament.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Add a backend entrypoint for admin/score-auth-admin tournament score entry that accepts both Player 1 and Player 2 principals along with the scores/round/table, enforces the same best-of-three validation, and applies the same tournament state checks as the existing tournament score submission flow.",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Fix the player-name dropdown in the Tournament score-entry form so the list of names is scrollable and usable on long member lists (including on mobile). Ensure the Select dropdown content has a consistent max height and vertical scrolling behavior.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/TournamentScoreEntry.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/src/components/TournamentScoreEntry.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/Tournament.tsx",
+    "frontend/src/components/TournamentScoreEntry.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

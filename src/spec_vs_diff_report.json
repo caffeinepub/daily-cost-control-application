@@ -1,0 +1,37 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-04T11:13:05.065Z",
+  "summary": "REQ-3 appears implemented via global CSS changes to make Radix Select dropdowns scrollable with a fixed max-height and touch scrolling. REQ-1 is partially evidenced by new admin-mode state/validation and a separate mutation call that submits explicit player1/player2 principals, but the truncated diff does not show the actual UI rendering (labels/selectors) to confirm the full acceptance criteria. REQ-2 cannot be verified from the truncated backend diff; frontend hooks reference a new admin submission flow, but the corresponding backend entrypoint is not evidenced.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Admins/score-auth-admins must see two separate member selectors labeled \"Player 1\" and \"Player 2\" in the Tournament -> Enter Scores tab, while non-admin users retain the existing opponent-only UX.",
+      "reason": "The diff shows admin-mode state (player1/player2) and branching submission logic, but the file is truncated before the JSX that would prove the presence of two labeled selectors and the preserved non-admin UI.",
+      "evidence": [
+        "frontend/src/components/TournamentScoreEntry.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Add a backend shared method for admin/score-auth-admin tournament score entry that accepts both Player 1 and Player 2 principals, enforces best-of-three validation, and applies the same tournament state checks as the existing flow.",
+      "reason": "backend/main.mo is truncated and does not show any new tournament admin score-submission entrypoint or its validation/state-check logic. Frontend references a new mutation hook, but the backend implementation is not evidenced in the provided diff excerpt.",
+      "evidence": [
+        "backend/main.mo (truncated)",
+        "frontend/src/hooks/useQueries.ts (truncated)",
+        "frontend/src/components/TournamentScoreEntry.tsx (truncated)"
+      ]
+    }
+  ],
+  "hallucinated_features": [],
+  "confidence": 0.55,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/components/Tournament.tsx",
+    "frontend/src/components/TournamentScoreEntry.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "project_state.json"
+  ]
+}

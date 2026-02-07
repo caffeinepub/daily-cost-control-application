@@ -1,0 +1,55 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Tournament score entry: explicit Player 1/Player 2 for admins and scrollable member dropdown",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Update Tournament Enter Scores UX so admins/score-auth-admins can explicitly select Player 1 and Player 2 (cannot be the same), while non-admin users keep the existing opponent-only flow and all UI text remains in English.",
+      "acceptanceCriteria": [
+        "In the Tournament -> Enter Scores tab, admins/score-auth-admins see two separate member selectors labeled \"Player 1\" and \"Player 2\".",
+        "The form prevents selecting the same member for both Player 1 and Player 2 and shows a clear English validation message.",
+        "Submitting as an admin records the match with the selected Player 1 and Player 2 principals in the backend tournament match record (not using the admin caller as playerA unless they were selected).",
+        "Non-admin authenticated users retain the existing UX of selecting only an opponent (caller remains Player 1)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add a new react-query mutation hook that calls the backend capability for admin/score-auth-admin tournament score submission with explicit Player 1 + Player 2 principals (submitTournamentMatchScoreWithPlayers), and invalidates/refetches the same tournament queries as the existing submit flow."
+        },
+        {
+          "path": "frontend/src/components/TournamentScoreEntry.tsx",
+          "operation": "modify",
+          "description": "Update the score-entry form to support an admin/score-auth-admin mode that shows two member selectors labeled \"Player 1\" and \"Player 2\", validates they differ with a clear English message, and submits using the new admin-with-players mutation; keep the existing opponent-only UX and submission path for non-admin users. Use the authorization component’s role-based access behavior via the existing admin/score-auth-admin checks exposed in the app (Verify the component's usage instructions before implementing)."
+        },
+        {
+          "path": "frontend/src/components/Tournament.tsx",
+          "operation": "modify",
+          "description": "Wire the updated TournamentScoreEntry by passing down whether the current user has admin/score-auth-admin access (derived from existing role checks), so the score-entry tab renders the correct admin vs non-admin score-entry UX. Use the authorization component’s role-based access behavior via existing checks (Verify the component's usage instructions before implementing)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Fix the Tournament score-entry member Select dropdown so long member lists have a consistent max height and remain vertically scrollable on desktop and mobile for both admin and non-admin views.",
+      "acceptanceCriteria": [
+        "When the member Select dropdown is opened in the score-entry form, it shows a vertical scrollbar (when needed) and the user can scroll to reach all members.",
+        "The dropdown remains scrollable on mobile/touch devices.",
+        "The fix applies to both Player 1/Player 2 selectors (admin view) and the opponent selector (non-admin view)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Adjust the global Radix Select dropdown styling to enforce a consistent max height for Select content and ensure vertical scrolling works reliably (including touch scrolling), without requiring changes to immutable shadcn/ui component source files."
+        },
+        {
+          "path": "frontend/src/components/TournamentScoreEntry.tsx",
+          "operation": "modify",
+          "description": "Ensure the member Select dropdown(s) used for opponent selection (non-admin) and Player 1/Player 2 selection (admin) apply/benefit from the max-height + overflow-y scrolling behavior consistently, including on mobile/touch devices."
+        }
+      ]
+    }
+  ]
+}
